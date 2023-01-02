@@ -12,95 +12,64 @@
 // the screen should remain fully clear as long as no key is pressed.
 
 // Put your code here.
+//p[i]=screen
+//while (p[i] < 24576(KBD)){
+//M[p[i]] = -1
+//p=p+1}
+//參考資料:https://www.youtube.com/watch?v=4_bmvT-h8Zs&feature=youtu.be
+//複製資料:https://www.cnblogs.com/YjmStr/p/15371886.html
 
-// --------------------------
-// 類似 Ｃ語言的高階寫法
-// forever
-//   arr = SCREEN
-//   n = 8192
-//   i = 0
-//   while (i < n) {
-//     if (*KBD != 0)
-//       arr[i] = -1
-//     else
-//       arr[i] = 0
-//     i = i + 1
-//   }
-// goto forever;
-// --------------------------
-// 類似 Ｃ語言的低階寫法
-// arr = SCREEN
-// n=8192
-// FOREVER:
-// loop:
-//   if (i==n) goto ENDLOOP
-//   if (*KBD != 0)
-//     RAM[arr+i] = -1
-//   else 
-//     RAM[arr+i] = 0
-//   i++
-// goto loop
-// ENDLOOP:
-// goto FOREVER
-// --------------------------
-
-(FOREVER)
-// arr = SCREEN
-	@SCREEN
-	D=A
-	@arr
-	M=D
-
-// n=8192
-	@8192
-	D=A
-	@n
-	M=D
-// i = 0
-	@i
-	M=0
 (LOOP)
-  // if (i==n) goto ENDLOOP
-	@i
-	D=M
-	@n
-	D=D-M
-	@ENDLOOP
-	D; JEQ
-	
-  // if (*KBD != 0)
-	@KBD
-	D=M     // D = *KBD
-	@ELSE
-	D; JEQ  // if (*KDB==0) goto ELSE
-	
-	//   RAM[arr+i] = -1
-	@arr
-	D=M
-	@i
-	A=D+M
-	M=-1
-	
-	@ENDIF
-	0; JMP
-(ELSE)	
-  // else 
-  //   RAM[arr+i] = 0
-	@arr
-	D=M
-	@i
-	A=D+M
-	M=0
-	
-(ENDIF)
-	
-	// i++
-	@i
-	M=M+1
-	
-	@LOOP
-	0; JMP
+@KBD
+D=M 
+@BLACK 
 
-(ENDLOOP)
-	@FOREVER
-	0; JMP
+D;JNE //不相等時跳躍
+@WHITE 
+D;JEQ //相等時跳躍
+@LOOP 
+0;JMP //無條件跳出
+(BLACK)
+@SCREEN 
+D=A
+@P 
+M=D //P=SCREEN 
+(BLACKLOOP)
+@P 
+D=M 
+@KBD 
+D=D-A //D=P-KBD 
+@LOOP
+D;JEQ //相等時跳躍
+D=-1 //黑色
+@P 
+A=M     
+M=D
+D=1 
+@P
+D=D+M 
+M=D   
+@BLACKLOOP 
+0;JMP 
+(WHITE) 
+@SCREEN 
+D=A 
+@P //P=SCREEN 
+M=D 
+(WHITELOOP)
+@P 
+D=M 
+@KBD 
+D=D-A //P-KBD 
+@LOOP 
+D;JEQ 
+D=0 
+@P 
+A=M 
+M=D 
+D=1  
+@P
+D=D+M 
+M=D 
+@WHITELOOP
+0;JMP  

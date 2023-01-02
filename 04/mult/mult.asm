@@ -7,44 +7,25 @@
 // (R0, R1, R2 refer to RAM[0], RAM[1], and RAM[2], respectively.)
 
 // Put your code here.
-
-
-@R0
-D=M
-@a
-M=D	// 令R0 = a
-
-@R1
-D=M
-@b
-M=D	// 令R1 = b
-
-@0
-D=A
 @R2
-D=M	
-@sum
-M=D	// 令R2 = sum
-
-(WHILE)
-	@a
-	D=M	
-	@END
-	D;JLE	// if a <= 0 END      
-	
-	@b
-	D=M	// D = y
-	@sum
-	M=D+M	// sum = sum + b
-	@1
-	D=A	// D = 1
-	@a
-	M=M-D	// a = a - 1	
-
-	@WHILE
-	0;JMP	// if a>0 重新回到while迴圈
-(END)	
-	@END
-	0;JMP	
-
-    //from https://github.com/b8990523/co111a/blob/main/04/mult/mult.asm
+M = 0
+@i
+M = 0
+(LOOP)
+    @i
+    D = M              
+    @R1          
+    D = M - D         
+    @END
+    D; JEQ             
+    @R0
+    D = M              
+    @R2
+    M = D + M          
+    @i
+    M = M + 1
+    @LOOP
+    0; JMP            
+(END)
+    @END
+    0; JMP             
